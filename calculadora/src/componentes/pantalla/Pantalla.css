@@ -1,19 +1,18 @@
 .input {
-  height: 75px;
-  border-radius: 50px;
-  margin-bottom: 20px;
   display: flex;
+  font-weight: 500;
+  font-size: 50px;
+  color: rgb(199, 199, 199);
+  height: 120px;
+  width: 95%;
   justify-content: flex-end;
-  align-items: center;
-  font-weight: bold;
-  font-size: 30px;
-  background-color: #0a0a23;
-  color: white;
-  padding: 11px 30px 11px 11px;
-  margin: 1px solid #888;
-  box-shadow: -1px 4px 1px 1px white;
+  align-self: center;
 }
 
-.texto{
+.texto {
   overflow: auto;
+}
+
+.display-none{
+  display: none;
 }

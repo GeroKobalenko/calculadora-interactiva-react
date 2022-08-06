@@ -3,25 +3,28 @@ import './App.css';
 import { evaluate } from 'mathjs';
 import Pantalla from './componentes/pantalla/Pantalla';
 import Boton from './componentes/boton/Boton';
-import BotonClear from './componentes/boton-clear/BotonClear';
 
 const botonesAux = [
-  { key: 1, texto: '1', esOperador: false },
-  { key: 2, texto: '2', esOperador: false },
-  { key: 3, texto: '3', esOperador: false },
-  { key: 4, texto: '+', esOperador: true },
-  { key: 5, texto: '4', esOperador: false },
-  { key: 6, texto: '5', esOperador: false },
-  { key: 7, texto: '6', esOperador: false },
-  { key: 8, texto: '-', esOperador: true },
-  { key: 9, texto: '7', esOperador: false },
-  { key: 10, texto: '8', esOperador: false },
-  { key: 11, texto: '9', esOperador: false },
-  { key: 12, texto: '*', esOperador: true },
-  { key: 13, texto: '=', esOperador: true },
-  { key: 14, texto: '0', esOperador: false },
-  { key: 15, texto: '.', esOperador: true },
-  { key: 16, texto: '/', esOperador: true },
+  { key: 1, texto: 'AC', esOperador: false },
+  { key: 2, texto: '', esOperador: false, vacio: true },
+  { key: 3, texto: '', esOperador: false, vacio: true },
+  { key: 4, texto: '/', esOperador: true, separaFila: true },
+  { key: 5, texto: '7', esOperador: false },
+  { key: 6, texto: '8', esOperador: false },
+  { key: 7, texto: '9', esOperador: false },
+  { key: 8, texto: 'x', esOperador: true },
+  { key: 9, texto: '4', esOperador: false },
+  { key: 10, texto: '5', esOperador: false },
+  { key: 11, texto: '6', esOperador: false },
+  { key: 12, texto: '-', esOperador: true },
+  { key: 13, texto: '1', esOperador: false },
+  { key: 14, texto: '2', esOperador: false },
+  { key: 15, texto: '3', esOperador: false },
+  { key: 16, texto: '+', esOperador: true },
+  { key: 17, texto: '.', esOperador: false },
+  { key: 18, texto: '0', esOperador: false },
+  { key: 19, texto: '⌫', esOperador: false },
+  { key: 20, texto: '=', esOperador: true },
 
 ];
 
@@ -36,9 +39,11 @@ class App extends React.Component {
     }
 
     this.agregarAInput = this.agregarAInput.bind(this);
+    this.manejadorDeClick = this.manejadorDeClick.bind(this);
     this.calcularResultado = this.calcularResultado.bind(this);
     this.limpiar = this.limpiar.bind(this);
     this.onKeyPressed = this.onKeyPressed.bind(this);
+    this.esOperador = this.esOperador.bind(this);
   }
 
   onKeyPressed(e) {
@@ -53,15 +58,31 @@ class App extends React.Component {
       e.key === '8' ||
       e.key === '9' ||
       e.key === '0') {
-        this.agregarAInput(e.key);
+      this.agregarAInput(e.key);
     }
     if (e.key === 'Enter') this.calcularResultado();
   }
 
+  manejadorDeClick(boton) {
+    if (boton.key === 20) this.calcularResultado();
+    else if (boton.texto === 'AC') this.limpiar('todo')
+    else if (boton.texto === '⌫') this.limpiar('')
+    else this.agregarAInput(boton.texto);
+  }
+
   agregarAInput(valor) {
-    this.setState((state) => {
-      return { texto: state.texto + valor }
-    });
+    if ((this.esOperador(valor) && (this.esOperador(this.state.texto.substring(-1))))){
+      alert("No puede ingresar dos operadores seguidos!");
+      return;
+    } 
+    if (this.state.texto.length <= 11) {
+      this.setState((state) => {
+        return { texto: state.texto + valor }
+      });
+    }
+    else {
+      alert("Números maximos ingresados!");
+    }
   }
 
   calcularResultado() {
@@ -88,13 +109,14 @@ class App extends React.Component {
     }
   }
 
+  esOperador(valor) {
+    return isNaN(valor);
+  }
+
   render() {
     return (
       <div className="App"
         tabIndex="0" onKeyDown={this.onKeyPressed}>
-        <header className="App-header">
-          <h2>Calculadora</h2>
-        </header>
         <div className="contenedor-calculadora">
           <Pantalla texto={this.state.texto} />
           {
@@ -102,11 +124,10 @@ class App extends React.Component {
               <Boton
                 key={boton.key}
                 boton={boton}
-                click={boton.key === 13 ? this.calcularResultado : this.agregarAInput}
+                click={this.manejadorDeClick}
               />
             )
           }
-          <BotonClear limpiar={this.limpiar} />
         </div>
       </div>
     );
