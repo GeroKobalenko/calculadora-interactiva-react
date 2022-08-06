@@ -9,16 +9,22 @@ class Boton extends React.Component {
   }
 
   click() {
-    this.props.click(this.props.boton.texto);
+    this.props.click(this.props.boton);
   }
 
   render() {
     return (
-      <div
-        className={`boton-contenedor ${this.props.boton.esOperador ? 'operador' : ''}`.trimEnd()}
-        onClick={this.click}>
-        {this.props.boton.texto}
+      <div>
+        <div
+          className={`boton-contenedor ${this.props.boton.esOperador ? 'operador' : ''} ${this.props.boton.vacio ? 'display-none' : ''}`.trimEnd()}
+          onClick={this.click}>
+          {this.props.boton.texto}
+        </div>
+        <div className={`contenedor-vacio ${!this.props.boton.vacio ? 'display-none' : ''}`.trimEnd()}>
+      VACIO
+        </div>
       </div>
+
     );
   }
 }

@@ -11,8 +11,11 @@ class Pantalla extends React.Component {
   render() {
     return (
       <div className='input'>
-        <div className='texto'>
+        <div className={`texto' ${!this.props.texto.length ? 'display-none' : ''}`.trimEnd()}>
           {this.props.texto}
+        </div>
+        <div className={`texto' ${this.props.texto.length ? 'display-none' : ''}`.trimEnd()}>
+          0
         </div>
       </div>
     );
